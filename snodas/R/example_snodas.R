@@ -14,3 +14,4 @@ date = as.Date(c('09-01-2020', '09-01-2019', '09-01-2018'), format = '%m-%d-%Y')
 
 #exicute funtion
 get_snodas(date)
+  
