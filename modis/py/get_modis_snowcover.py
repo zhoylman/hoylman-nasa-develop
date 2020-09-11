@@ -1,4 +1,4 @@
-# this script interacts with earth engine to extract/ compute smap data.
+# this script interacts with earth engine to extract/ modis snowcover.
 # output is a download url that is then imported into R for additional
 # manipulation, however, all manipulation could be done in python
 
@@ -15,20 +15,19 @@ import os
 ee.Initialize()
 
 #import states shape file (this will work for multiple states if required)
+#Much higher resolution so we are only going to extract MT
 states = (ee.Collection.loadTable('users/zhoylman/states')
-          #.filter(ee.Filter.Or(ee.Filter.eq("STATE_ABBR",   'MT')))
-          .filter(ee.Filter.And(ee.Filter.neq("STATE_ABBR", 'AK'),
-                               ee.Filter.neq("STATE_ABBR", 'HI')))
+          .filter(ee.Filter.Or(ee.Filter.eq("STATE_ABBR",   'MT')))
           .union())
 
 # define clipping function to map over IC (if you want to clip multiple images)
 def clipped(img):
     return img.clip(states)
 
-# import smap soil moisture, select Surface soil moisture anomaly (ssma),
+# import modis snow cover,
 # different bands can be selected by changing band name
-dataset = (ee.ImageCollection("NASA_USDA/HSL/SMAP_soil_moisture")
-           .select('ssma')
+dataset = (ee.ImageCollection("MODIS/006/MOD10A1")
+           .select('NDSI_Snow_Cover')
 # clip dataset to MT
            .map(clipped))
 
@@ -72,6 +71,6 @@ path = current.getDownloadUrl({
 url_list.append(path)
 
 # PATH TO YOUR HOME DIRECTORY
-with open('/home/zhoylman/hoylman-nasa-develop/smap/urls/url_list.csv', 'w') as myfile:
+with open('/home/zhoylman/hoylman-nasa-develop/modis/urls/url_list.csv', 'w') as myfile:
     wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
     wr.writerow(url_list)
