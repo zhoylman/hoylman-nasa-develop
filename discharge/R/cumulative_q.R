@@ -31,7 +31,11 @@ cumulative_q = raw_data %>%
   #group dataset by year
   group_by(year) %>%
   #calcaulte annual summary
-  summarize(cumulative_q = sum(integrated_q, na.rm = t))
+  summarize(cumulative_q = sum(integrated_q, na.rm = T))
+
+#plot data
+plot(cumulative_q$year, cumulative_q$cumulative_q)
+lines(cumulative_q$year, cumulative_q$cumulative_q)
 
 #write out data
 write_csv(cumulative_q, paste0('/home/zhoylman/hoylman-nasa-develop/discharge/data/cumulative_q_station_', station, '.csv'))
