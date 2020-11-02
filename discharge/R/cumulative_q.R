@@ -34,7 +34,8 @@ cumulative_q = raw_data %>%
   summarize(cumulative_q = sum(integrated_q, na.rm = F))
 
 #plot data
-plot(cumulative_q$year, cumulative_q$cumulative_q)
+plot(cumulative_q$year, cumulative_q$cumulative_q, main = meta$staname,
+     ylab = 'Cumulative Q (ft^3)', xlab = '')
 lines(cumulative_q$year, cumulative_q$cumulative_q)
 
 #write out data
